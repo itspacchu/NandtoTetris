@@ -13,6 +13,6 @@ CHIP Inc16 {
     OUT out[16];
 
     PARTS:
-    //didnt realise you can address bits this way
+    //implementation tip: true false keywords 
     Add16(a=in,b[0]=true,out=out);
 }
