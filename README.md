@@ -1,2 +1,3 @@
-# [Nand-to-tetris](https://www.nand2tetris.org/software)
+# nand2tetris
 
+[nand2tetris](https://www.nand2tetris.org/) Coursera course material. (redo)
