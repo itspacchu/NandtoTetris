@@ -42,12 +42,12 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-    Mux16(a=x, b=false, sel=zx, out=zxOut);
-    Not16(in=x,out=notX);
+    Mux16(a=x, b[0..15]=false, sel=zx, out=zxOut);
+    Not16(in=zxOut,out=notX);
     Mux16(a=x, b=notX, sel=nx, out=nxOut);
 
-    Mux16(a=y, b=false, sel=zy, out=zyOut);
-    Not16(in=y,out=notY);
+    Mux16(a=y, b[0..15]=false, sel=zy, out=zyOut);
+    Not16(in=zyOut,out=notY);
     Mux16(a=y, b=notY, sel=ny, out=nyOut);
 
     And16(a=nxOut,b=nyOut,out=andXY);
@@ -55,5 +55,20 @@ CHIP ALU {
 
     Mux16(a=andXY, b=orXY, sel=f, out=fOut);
     Not16(in=fOut,out=notF);
-    Mux16(a=fOut, b=notF, sel=no, out=out);
+    Mux16(a=fOut, b=notF, sel=no, out=preOut);
+
+    // //Implement ZR flag ( Sub buses not allowed )
+    // Or8Way(in=preOut[0..7], out=zr0);
+    // Or8Way(in=preOut[8..15], out=zr1);
+    // Or(in=zr0, in=zr1, out=zrOut);
+    // Not(in=zrOut, out=zr);
+
+    Or16Way(in=preOut, out=zrPartial);
+    Not(in=zrPartial, out=zr);
+
+    //Implement NG flag
+    And16(a=preOut, b[0..15]=true, out[15]=ng,out[0..14]=null);
+    
+    //delayed Output
+    Or16(a=preOut, b[0..15]=false, out=out);
 }
