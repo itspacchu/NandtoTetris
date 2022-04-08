@@ -4,15 +4,15 @@
 // File name: projects/03/a/Bit.hdl
 
 /**
- * 1-bit register:
- * If load[t] == 1 then out[t+1] = in[t]
- *                 else out does not change (out[t+1] = out[t])
+ * 1-bit register.
+ * If load[t]=1 then out[t+1] = in[t]
+ *              else out does not change (out[t+1]=out[t])
  */
 
 CHIP Bit {
     IN in, load;
     OUT out;
-
     PARTS:
-    // Put your code here:
+    Mux(a=preOut,b=in,sel=load,out=buff);
+    DFF(in=buff,out=out,out=preOut);
 }
