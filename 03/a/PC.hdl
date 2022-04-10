@@ -1,5 +1,5 @@
 // This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
+// and the bincrek "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
 // File name: projects/03/a/PC.hdl
 
@@ -16,7 +16,17 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    //how?
+    // else out[t+1] = out[t]
+    Inc16(in=incre,out=incd);
 
+    // else if (inc[t] == 1)  out[t+1] = out[t] + 1  --> incIfSet
+	Mux16(a=incre,b=incd,sel=inc,out=incIfSet);
 
+    // else if (load[t] == 1) out[t+1] = in[t] --> LoadIfSet
+	Mux16(a=incIfSet,b=in,sel=load,out=loadIfSet);
+
+    // else if (reset[t] == 1) out[t+1] = 0 --> resetIfSet
+	Mux16(a=loadIfSet,b[0..15]=false,sel=reset,out=resetIfSet);
+
+	Register(in=resetIfSet,load=true,out=out,out=incre);
 }
